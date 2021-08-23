@@ -25,7 +25,7 @@ export class VueRouter {
   }
   push(location) {
     this.history.transitionTo(location, () => {
-      window.location.hash = location;
+      this.history.pushState(location);
     });
   }
   init(app) {

@@ -24,4 +24,7 @@ export default class Hash extends History {
       this.transitionTo(getHash());
     });
   }
+  pushState(location) {
+    window.location.hash = location;
+  }
 }
