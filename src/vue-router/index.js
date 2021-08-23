@@ -18,6 +18,7 @@ export class VueRouter {
         this.history = new HTML5History(this);
         break;
     }
+    this.beforeHooks = [];
   }
   match(location) {
     return this.matcher.match(location);
@@ -42,6 +43,9 @@ export class VueRouter {
     history.listen((route) => {
       app._route = route;
     });
+  }
+  beforeEach(cb) {
+    this.beforeHooks.push(cb);
   }
 }
 

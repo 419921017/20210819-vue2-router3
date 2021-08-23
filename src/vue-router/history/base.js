@@ -31,15 +31,36 @@ export default class History {
     ) {
       return;
     }
+    // 跳转前, 执行对应的钩子
+
+    let queue = this.router.beforeHooks;
+    function runQueue(queue, iterator, cb) {
+      function step(index) {
+        if (index >= queue.length) {
+          return cb();
+        }
+        let hook = queue[index];
+        iterator(hook, () => step(index + 1));
+      }
+      step(0);
+    }
+
+    const iterator = (hook, next) => {
+      hook(route, this.current, next);
+    };
+    runQueue(queue, iterator, () => {});
+    this.updateRoute(route);
+    cb && cb();
+  }
+  listen(cb) {
+    this.cb = cb;
+  }
+  updateRoute(route) {
     // 路径变化渲染组件, 响应式原理
     // 将current变成响应式, 只要更改current就可以渲染组件
     // this.current = createRoute(record, { path });
     this.current = route;
     // Vue.util.defineReactive() === defineReactive
     this.cb && this.cb(route);
-    cb && cb();
-  }
-  listen(cb) {
-    this.cb = cb;
   }
 }
