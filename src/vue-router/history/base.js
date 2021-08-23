@@ -48,9 +48,10 @@ export default class History {
     const iterator = (hook, next) => {
       hook(route, this.current, next);
     };
-    runQueue(queue, iterator, () => {});
-    this.updateRoute(route);
-    cb && cb();
+    runQueue(queue, iterator, () => {
+      this.updateRoute(route);
+      cb && cb();
+    });
   }
   listen(cb) {
     this.cb = cb;
